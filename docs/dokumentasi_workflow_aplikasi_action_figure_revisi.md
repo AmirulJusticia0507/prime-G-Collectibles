@@ -9,7 +9,8 @@ Versi ini memperbaiki kekurangan pada versi awal: relasi data, state machine, id
 ## 1. Frontend & UI Tech Stack (Tailwind CSS)
 
 *   **Styling:** Tailwind CSS v3
-*   **Interactive UI:** React.js / Vue.js 3 / Alpine.js
+*   **Template Engine:** Thymeleaf (server-rendered, menyatu dengan Spring Boot)
+*   **Interactive UI:** Alpine.js (interaksi ringan tanpa SPA terpisah; alternatif React/Vue jika butuh SPA)
 *   **Icons:** Lucide Icons / Heroicons
 
 ### Contoh Visual Badge Status DP (Tailwind Syntax)

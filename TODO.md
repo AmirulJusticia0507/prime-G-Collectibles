@@ -29,7 +29,8 @@
 - [ ] Catat ke `order_status_history`
 
 ## Fase 5: Dashboard Admin (Tailwind)
-- [ ] Setup Tailwind CSS
+- [ ] Setup Tailwind CSS (dengan Thymeleaf layout)
+- [ ] Setup Alpine.js untuk interaksi ringan
 - [ ] Halaman list order + filter status
 - [ ] Halaman manajemen produk & slot PO
 - [ ] Badge status & progress bar DP (lihat contoh di docs)

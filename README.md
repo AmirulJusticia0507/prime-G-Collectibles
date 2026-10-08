@@ -7,7 +7,7 @@ Backend & arsitektur e-commerce action figure dengan alur Pre-Order (PO), Down P
 * **Backend:** Java 17/21, Spring Boot, Spring Data JPA
 * **Database:** PostgreSQL 14+
 * **Payment Gateway:** Midtrans
-* **Frontend:** Tailwind CSS v3, React/Vue/Alpine.js
+* **Frontend:** Thymeleaf + Tailwind CSS v3 + Alpine.js (server-rendered, satu project dengan Spring Boot)
 
 ## Struktur Project
 
