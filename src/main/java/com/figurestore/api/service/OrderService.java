@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class OrderService {
@@ -93,6 +95,13 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderResponse> findAll() {
         return orders.findAll().stream().map(this::response).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderResponse> findPage(String status, Pageable pageable) {
+        Page<Order> page = status == null || status.isBlank()
+                ? orders.findAll(pageable) : orders.findByFulfillmentStatus(status, pageable);
+        return page.map(this::response);
     }
 
     @Transactional(readOnly = true)

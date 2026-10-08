@@ -32,6 +32,12 @@ class AdminDashboardTests {
     }
 
     @Test
+    void customerCannotAccessDashboard() throws Exception {
+        mvc.perform(get("/admin/orders").with(user("customer").roles("CUSTOMER")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void adminFormLoginWorksRepeatedly() throws Exception {
         for (int attempt = 0; attempt < 2; attempt++) {
             mvc.perform(formLogin("/admin/login").user("admin").password("change-me"))
@@ -54,8 +60,11 @@ class AdminDashboardTests {
                 .andExpect(view().name("admin/products"))
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Dashboard Product")));
 
-        mvc.perform(post("/admin/products/{id}/slot", product.getId())
+        mvc.perform(post("/admin/products/{id}", product.getId())
                         .with(user("admin").roles("ADMIN")).with(csrf())
+                        .param("name", product.getName())
+                        .param("fullPrice", product.getFullPrice().toPlainString())
+                        .param("dpPrice", product.getDpPrice().toPlainString())
                         .param("stockSlot", "7").param("status", "PO_CLOSED"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/products"));
@@ -63,5 +72,8 @@ class AdminDashboardTests {
         Product updated = products.findById(product.getId()).orElseThrow();
         org.assertj.core.api.Assertions.assertThat(updated.getStockSlot()).isEqualTo(7);
         org.assertj.core.api.Assertions.assertThat(updated.getStatus()).isEqualTo("PO_CLOSED");
+
+        mvc.perform(get("/admin/users").with(user("admin").roles("ADMIN")))
+                .andExpect(status().isOk()).andExpect(view().name("admin/users"));
     }
 }

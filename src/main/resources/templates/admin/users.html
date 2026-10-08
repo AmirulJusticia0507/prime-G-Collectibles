@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Users')}"></head><body class="bg-slate-950 text-slate-200 min-h-screen">
+<nav th:replace="~{admin/fragments :: nav}"></nav><main class="max-w-6xl mx-auto px-4 py-6">
+<div th:replace="~{admin/fragments :: feedback}"></div><h1 class="text-xl font-semibold mb-4">Manajemen User</h1>
+<form method="post" action="/admin/users" class="panel grid md:grid-cols-5 gap-3 mb-4">
+  <input required name="fullName" placeholder="Nama lengkap" class="input"><input required type="email" name="email" placeholder="Email" class="input">
+  <input name="phone" placeholder="Telepon" class="input"><input required minlength="8" type="password" name="password" placeholder="Password" class="input">
+  <select name="role" class="input"><option>CUSTOMER</option><option>ADMIN</option></select><button class="btn md:col-span-5">Tambah User</button>
+</form>
+<div class="panel overflow-x-auto"><table class="w-full text-sm"><thead><tr><th class="cell">Nama</th><th class="cell">Email</th><th class="cell">Telepon</th><th class="cell">Role</th></tr></thead><tbody>
+<tr th:each="u:${result.content}" class="border-t border-slate-800"><td class="cell" th:text="${u.fullName}"></td><td class="cell" th:text="${u.email}"></td><td class="cell" th:text="${u.phone}"></td><td class="cell"><form method="post" th:action="@{/admin/users/{id}/role(id=${u.id})}" class="flex gap-2"><select name="role" class="input"><option th:selected="${u.role=='CUSTOMER'}">CUSTOMER</option><option th:selected="${u.role=='ADMIN'}">ADMIN</option></select><button class="btn">Simpan</button></form></td></tr>
+</tbody></table></div><div th:replace="~{admin/fragments :: pager('/admin/users', ${result}, '')}"></div>
+</main></body></html>

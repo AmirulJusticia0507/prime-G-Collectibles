@@ -6,6 +6,7 @@
   <title th:text="${title} + ' — FigureVault Admin'">FigureVault Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>.input{background:#1e293b;border:1px solid #334155;border-radius:.25rem;padding:.4rem .65rem;color:#e2e8f0}.btn{background:#4f46e5;color:white;border-radius:.25rem;padding:.45rem .8rem}.panel{background:#0f172a;border:1px solid #1e293b;border-radius:.5rem;padding:1rem}.cell{text-align:left;padding:.6rem}</style>
 </head>
 <body>
 <nav th:fragment="nav" class="bg-slate-900 border-b border-slate-800">
@@ -14,8 +15,19 @@
     <div class="flex gap-4 text-sm">
       <a href="/admin/orders" class="hover:text-indigo-400">Orders</a>
       <a href="/admin/products" class="hover:text-indigo-400">Products</a>
+      <a href="/admin/users" class="hover:text-indigo-400">Users</a>
+      <form method="post" action="/admin/logout"><button class="text-rose-400">Logout</button></form>
     </div>
   </div>
 </nav>
+<div th:fragment="feedback">
+  <p th:if="${message}" th:text="${message}" class="mb-4 rounded border border-emerald-500/20 bg-emerald-500/10 p-3 text-sm text-emerald-400"></p>
+  <p th:if="${error}" th:text="${error}" class="mb-4 rounded border border-rose-500/20 bg-rose-500/10 p-3 text-sm text-rose-400"></p>
+</div>
+<div th:fragment="pager(path,result,extra)" th:if="${result.totalPages > 1}" class="flex justify-center gap-3 mt-4 text-sm">
+  <a th:if="${result.hasPrevious()}" th:href="${path+'?page='+(result.number-1)+'&'+extra}" class="btn">Sebelumnya</a>
+  <span class="p-2" th:text="${(result.number+1)+' / '+result.totalPages}"></span>
+  <a th:if="${result.hasNext()}" th:href="${path+'?page='+(result.number+1)+'&'+extra}" class="btn">Berikutnya</a>
+</div>
 </body>
 </html>

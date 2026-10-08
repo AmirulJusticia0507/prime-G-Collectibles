@@ -5,6 +5,7 @@
 <nav th:replace="~{admin/fragments :: nav}"></nav>
 
 <main class="max-w-6xl mx-auto px-4 py-6" x-data="{ showFilter: false }">
+  <div th:replace="~{admin/fragments :: feedback}"></div>
   <div class="flex items-center justify-between mb-4">
     <h1 class="text-xl font-semibold">Daftar Order</h1>
     <button @click="showFilter = !showFilter" class="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-sm hover:bg-slate-700">Filter Status</button>
@@ -29,6 +30,7 @@
           <th class="text-left px-4 py-2">Total</th>
           <th class="text-left px-4 py-2">Status</th>
           <th class="text-left px-4 py-2 w-56">Progress DP</th>
+          <th class="text-left px-4 py-2">Aksi</th>
         </tr>
       </thead>
       <tbody>
@@ -37,18 +39,9 @@
           <td class="px-4 py-2" th:text="${r.userId}"></td>
           <td class="px-4 py-2" th:text="'Rp ' + ${#numbers.formatDecimal(r.totalAmount, 0, 'COMMA', 0, 'POINT')}"></td>
           <td class="px-4 py-2">
-            <span th:switch="${r.status}">
-              <span th:case="'WAITING_DP'" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span th:text="${r.dpBadge}"></span></span>
-              <span th:case="'DP_PAID'" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span><span th:text="${r.dpBadge}"></span></span>
-              <span th:case="'WAITING_PELUNASAN'" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/10 text-violet-400 border border-violet-500/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse"></span><span th:text="${r.dpBadge}"></span></span>
-              <span th:case="'FULL_PAID'" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span th:text="${r.dpBadge}"></span></span>
-              <span th:case="*" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/20" th:text="${r.dpBadge}"></span>
-            </span>
+            <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border" th:classappend="${r.badgeClass}" th:text="${r.badge}"></span>
           </td>
+          <td class="px-4 py-2"><form th:if="${r.canTriggerPelunasan}" method="post" th:action="@{/admin/orders/{id}/pelunasan(id=${r.id})}"><button class="btn whitespace-nowrap">Kirim Pelunasan</button></form><span th:unless="${r.canTriggerPelunasan}" class="text-slate-600">—</span></td>
           <td class="px-4 py-2">
             <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
               <div class="bg-indigo-500 h-2 rounded-full" th:style="'width:' + ${r.progressPercent} + '%'"></div>
@@ -57,11 +50,12 @@
           </td>
         </tr>
         <tr th:if="${#lists.isEmpty(rows)}">
-          <td colspan="5" class="px-4 py-6 text-center text-slate-500">Belum ada order.</td>
+          <td colspan="6" class="px-4 py-6 text-center text-slate-500">Belum ada order.</td>
         </tr>
       </tbody>
     </table>
   </div>
+  <div th:replace="~{admin/fragments :: pager('/admin/orders', ${result}, 'status=' + (${status} ?: ''))}"></div>
 </main>
 </body>
 </html>
