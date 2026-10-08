@@ -91,6 +91,11 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public List<OrderResponse> findAll() {
+        return orders.findAll().stream().map(this::response).toList();
+    }
+
+    @Transactional(readOnly = true)
     public OrderResponse findById(Long id) {
         return response(orders.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order tidak ditemukan")));

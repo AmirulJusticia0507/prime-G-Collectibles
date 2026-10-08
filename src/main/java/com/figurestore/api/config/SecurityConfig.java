@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +32,23 @@ import java.nio.charset.StandardCharsets;
 public class SecurityConfig {
 
     @Bean
+    @org.springframework.core.annotation.Order(1)
+    SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/admin/login", "/admin/**", "/css/**", "/js/**")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/css/**", "/js/**", "/admin/login").permitAll()
+                        .anyRequest().hasRole("ADMIN"))
+                .formLogin(form -> form
+                        .loginPage("/admin/login")
+                        .loginProcessingUrl("/admin/login")
+                        .defaultSuccessUrl("/admin/orders", true)
+                        .permitAll())
+                .logout(logout -> logout.logoutUrl("/admin/logout").logoutSuccessUrl("/admin/login?logout"))
+                .build();
+    }
+
+    @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationConverter converter)
             throws Exception {
         return http
@@ -40,7 +56,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/webhooks/midtrans").permitAll()
-                        .requestMatchers("/admin/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers("/api/products/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
@@ -54,12 +70,14 @@ public class SecurityConfig {
             @Value("${app.admin.username:admin}") String adminUsername,
             @Value("${app.admin.password:change-me}") String adminPassword,
             PasswordEncoder encoder) {
-        UserDetails admin = User.withUsername(adminUsername)
-                .password(encoder.encode(adminPassword))
-                .roles("ADMIN")
-                .build();
+        String adminPasswordHash = encoder.encode(adminPassword);
         return username -> {
-            if (adminUsername.equals(username)) return admin;
+            if (adminUsername.equals(username)) {
+                return User.withUsername(adminUsername)
+                        .password(adminPasswordHash)
+                        .roles("ADMIN")
+                        .build();
+            }
             com.figurestore.api.model.User user = users.findByEmail(username)
                     .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException(
                             "User tidak ditemukan"));

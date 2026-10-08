@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${title} + ' — FigureVault Admin'">FigureVault Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+<nav th:fragment="nav" class="bg-slate-900 border-b border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="/admin/orders" class="font-bold text-indigo-400">FigureVault Admin</a>
+    <div class="flex gap-4 text-sm">
+      <a href="/admin/orders" class="hover:text-indigo-400">Orders</a>
+      <a href="/admin/products" class="hover:text-indigo-400">Products</a>
+    </div>
+  </div>
+</nav>
+</body>
+</html>

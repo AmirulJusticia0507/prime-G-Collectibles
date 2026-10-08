@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Products')}"></head>
+<body class="bg-slate-950 text-slate-200 min-h-screen">
+<nav th:replace="~{admin/fragments :: nav}"></nav>
+
+<main class="max-w-6xl mx-auto px-4 py-6" x-data="{ query: '' }">
+  <p th:if="${message}" th:text="${message}" class="mb-4 rounded border border-emerald-500/20 bg-emerald-500/10 p-3 text-sm text-emerald-400"></p>
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-semibold">Katalog Produk</h1>
+    <input x-model="query" placeholder="Cari nama/manufacturer..." class="bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm w-64">
+  </div>
+
+  <div class="bg-slate-900 border border-slate-800 rounded overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-800/60 text-slate-400">
+        <tr>
+          <th class="text-left px-4 py-2">Nama</th>
+          <th class="text-left px-4 py-2">Manufacturer</th>
+          <th class="text-left px-4 py-2">Scale</th>
+          <th class="text-left px-4 py-2">Full Price</th>
+          <th class="text-left px-4 py-2">DP</th>
+          <th class="text-left px-4 py-2">Slot & Status</th>
+          <th class="text-left px-4 py-2">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="p : ${products}" class="border-t border-slate-800"
+            x-show="query === '' || $el.innerText.toLowerCase().includes(query.toLowerCase())">
+          <td class="px-4 py-2" th:text="${p.name}"></td>
+          <td class="px-4 py-2 text-slate-400" th:text="${p.manufacturer}"></td>
+          <td class="px-4 py-2 text-slate-400" th:text="${p.scaleType}"></td>
+          <td class="px-4 py-2" th:text="'Rp ' + ${#numbers.formatDecimal(p.fullPrice, 0, 'COMMA', 0, 'POINT')}"></td>
+          <td class="px-4 py-2" th:text="'Rp ' + ${#numbers.formatDecimal(p.dpPrice, 0, 'COMMA', 0, 'POINT')}"></td>
+          <td class="px-4 py-2">
+            <form method="post" th:action="@{/admin/products/{id}/slot(id=${p.id})}" class="flex gap-2">
+              <input name="stockSlot" type="number" min="0" th:value="${p.stockSlot}" class="w-20 bg-slate-800 border border-slate-700 rounded px-2 py-1">
+              <select name="status" class="bg-slate-800 border border-slate-700 rounded px-2 py-1">
+                <option value="PO_OPEN" th:selected="${p.status == 'PO_OPEN'}">PO OPEN</option>
+                <option value="PO_CLOSED" th:selected="${p.status == 'PO_CLOSED'}">PO CLOSED</option>
+                <option value="READY_STOCK" th:selected="${p.status == 'READY_STOCK'}">READY STOCK</option>
+              </select>
+              <button class="rounded bg-indigo-600 px-2 py-1 text-white hover:bg-indigo-500">Simpan</button>
+            </form>
+          </td>
+          <td class="px-4 py-2">
+            <form method="post" th:action="@{/admin/products/{id}/delete(id=${p.id})}" onsubmit="return confirm('Hapus produk ini?')">
+              <button class="text-rose-400 hover:text-rose-300">Hapus</button>
+            </form>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(products)}">
+          <td colspan="7" class="px-4 py-6 text-center text-slate-500">Belum ada produk.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

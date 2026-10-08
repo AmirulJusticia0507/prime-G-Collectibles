@@ -29,11 +29,11 @@
 - [x] Catat ke `order_status_history`
 
 ## Fase 5: Dashboard Admin (Tailwind)
-- [ ] Setup Tailwind CSS (dengan Thymeleaf layout)
-- [ ] Setup Alpine.js untuk interaksi ringan
-- [ ] Halaman list order + filter status
-- [ ] Halaman manajemen produk & slot PO
-- [ ] Badge status & progress bar DP (lihat contoh di docs)
+- [x] Setup Tailwind CSS (dengan Thymeleaf layout)
+- [x] Setup Alpine.js untuk interaksi ringan
+- [x] Halaman list order + filter status
+- [x] Halaman manajemen produk & slot PO
+- [x] Badge status & progress bar DP (lihat contoh di docs)
 
 ## Fase 6: Hardening
 - [x] Spring Security + JWT (role ADMIN/CUSTOMER)

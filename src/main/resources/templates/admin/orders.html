@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Orders')}"></head>
+<body class="bg-slate-950 text-slate-200 min-h-screen">
+<nav th:replace="~{admin/fragments :: nav}"></nav>
+
+<main class="max-w-6xl mx-auto px-4 py-6" x-data="{ showFilter: false }">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-semibold">Daftar Order</h1>
+    <button @click="showFilter = !showFilter" class="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-sm hover:bg-slate-700">Filter Status</button>
+  </div>
+
+  <div x-show="showFilter" x-transition class="mb-4 p-4 bg-slate-900 border border-slate-800 rounded">
+    <form method="get" action="/admin/orders" class="flex items-center gap-3">
+      <select name="status" class="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm">
+        <option value="">Semua Status</option>
+        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == status}"></option>
+      </select>
+      <button class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 rounded text-sm text-white">Terapkan</button>
+    </form>
+  </div>
+
+  <div class="bg-slate-900 border border-slate-800 rounded overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-800/60 text-slate-400">
+        <tr>
+          <th class="text-left px-4 py-2">Order</th>
+          <th class="text-left px-4 py-2">User</th>
+          <th class="text-left px-4 py-2">Total</th>
+          <th class="text-left px-4 py-2">Status</th>
+          <th class="text-left px-4 py-2 w-56">Progress DP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="r : ${rows}" class="border-t border-slate-800">
+          <td class="px-4 py-2 font-mono text-xs" th:text="${r.orderNumber}"></td>
+          <td class="px-4 py-2" th:text="${r.userId}"></td>
+          <td class="px-4 py-2" th:text="'Rp ' + ${#numbers.formatDecimal(r.totalAmount, 0, 'COMMA', 0, 'POINT')}"></td>
+          <td class="px-4 py-2">
+            <span th:switch="${r.status}">
+              <span th:case="'WAITING_DP'" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span th:text="${r.dpBadge}"></span></span>
+              <span th:case="'DP_PAID'" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span><span th:text="${r.dpBadge}"></span></span>
+              <span th:case="'WAITING_PELUNASAN'" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/10 text-violet-400 border border-violet-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse"></span><span th:text="${r.dpBadge}"></span></span>
+              <span th:case="'FULL_PAID'" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span th:text="${r.dpBadge}"></span></span>
+              <span th:case="*" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/20" th:text="${r.dpBadge}"></span>
+            </span>
+          </td>
+          <td class="px-4 py-2">
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div class="bg-indigo-500 h-2 rounded-full" th:style="'width:' + ${r.progressPercent} + '%'"></div>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5" th:text="'Dibayar Rp ' + ${#numbers.formatDecimal(r.paidTotal, 0, 'COMMA', 0, 'POINT')} + ' (' + ${r.progressPercent} + '%)'"></p>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(rows)}">
+          <td colspan="5" class="px-4 py-6 text-center text-slate-500">Belum ada order.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>
