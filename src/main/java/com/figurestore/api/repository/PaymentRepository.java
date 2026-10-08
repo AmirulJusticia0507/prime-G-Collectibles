@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByOrderId(Long orderId);
+    java.util.Optional<Payment> findByPaymentNumber(String paymentNumber);
+    boolean existsByMidtransTransactionId(String midtransTransactionId);
     List<Payment> findByPaymentStatusAndExpiredAtBefore(String status, LocalDateTime time);
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Payment p where p.id = :id")

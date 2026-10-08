@@ -16,11 +16,11 @@
 - [x] Scheduler expire DP (24 jam) & pelunasan (7 hari)
 
 ## Fase 3: Payment Gateway (Midtrans)
-- [ ] Integrasi Snap token saat create payment
-- [ ] Webhook endpoint: verifikasi signature SHA-512
-- [ ] Idempotency webhook via `midtrans_transaction_id`
-- [ ] Update status payment & order dari callback
-- [ ] Unit test untuk skenario callback sukses/expired/gagal
+- [x] Integrasi Snap token saat create payment
+- [x] Webhook endpoint: verifikasi signature SHA-512
+- [x] Idempotency webhook via `midtrans_transaction_id`
+- [x] Update status payment & order dari callback
+- [x] Unit test untuk skenario callback sukses/expired/gagal
 
 ## Fase 4: Notifikasi Pelunasan
 - [ ] Endpoint admin trigger notifikasi pelunasan (ubah status ke WAITING_PELUNASAN)
