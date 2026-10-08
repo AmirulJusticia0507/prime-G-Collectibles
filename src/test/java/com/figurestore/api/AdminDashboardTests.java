@@ -62,6 +62,11 @@ class AdminDashboardTests {
         product.setStatus("PO_OPEN");
         product = products.save(product);
 
+        mvc.perform(get("/products/{id}", product.getId()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("store/product-detail"))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Dashboard Product")));
+
         mvc.perform(get("/admin/products").with(user("admin").roles("ADMIN")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/products"))

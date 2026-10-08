@@ -24,7 +24,7 @@
     <th class="cell">Nama</th><th class="cell">Manufacturer</th><th class="cell">Scale</th><th class="cell">Harga</th><th class="cell">DP</th><th class="cell">Slot</th><th class="cell">Status</th><th class="cell">Aksi</th>
   </tr></thead><tbody>
     <tr th:each="p : ${products}" class="border-b border-zinc-100 transition hover:bg-violet-50/40">
-      <td class="cell"><input required name="name" th:value="${p.name}" th:attr="form=${'product-'+p.id}" class="input w-44"></td>
+      <td class="cell"><a th:href="@{/products/{id}(id=${p.id})}" target="_blank" class="mb-2 block text-xs font-bold text-violet-600 hover:underline">Lihat detail ↗</a><input required name="name" th:value="${p.name}" th:attr="form=${'product-'+p.id}" class="input w-44"></td>
       <td class="cell"><input name="manufacturer" th:value="${p.manufacturer}" th:attr="form=${'product-'+p.id}" class="input w-36"></td>
       <td class="cell"><input name="scaleType" th:value="${p.scaleType}" th:attr="form=${'product-'+p.id}" class="input w-20"><input type="hidden" name="releaseDate" th:value="${p.releaseDate}" th:attr="form=${'product-'+p.id}"></td>
       <td class="cell"><input required name="fullPrice" type="number" min="1" th:value="${p.fullPrice}" th:attr="form=${'product-'+p.id}" class="input w-28"></td>
