@@ -1,15 +1,16 @@
-<!DOCTYPE html><html lang="id" xmlns:th="http://www.thymeleaf.org"><head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title th:text="${product.name}+' · FigureVault'">Detail Produk</title><script src="https://cdn.tailwindcss.com"></script><script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head><body class="min-h-screen bg-zinc-100 text-zinc-900">
-<nav class="border-b border-zinc-200 bg-white"><div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-8"><a href="/" class="flex items-center gap-3"><span class="grid h-10 w-10 place-items-center rounded-xl bg-violet-600 font-black text-white">FV</span><span><b class="block">FigureVault</b><small class="text-xs text-zinc-400">Premium Collectibles</small></span></a><span class="rounded-full bg-zinc-100 px-4 py-2 text-xs font-bold text-zinc-500">Produk original & terkurasi</span></div></nav>
-<main class="mx-auto max-w-7xl px-4 py-8 lg:px-8" x-data="{tab:'description'}"><div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl shadow-zinc-200/60">
-  <div class="grid lg:grid-cols-[1.08fr_.92fr]">
-    <section class="bg-gradient-to-br from-violet-50 via-white to-amber-50 p-6 lg:p-10"><div class="grid min-h-[480px] place-items-center rounded-3xl border border-white bg-white/70"><img src="/images/collectibles-hero.png" th:alt="${product.name}" class="max-h-[520px] w-full object-contain p-4 drop-shadow-2xl"></div><div class="mt-4 grid grid-cols-4 gap-3"><button th:each="i:${#numbers.sequence(1,4)}" class="rounded-2xl border border-zinc-200 bg-white p-2 transition hover:border-violet-500"><img src="/images/collectibles-hero.png" alt="Tampilan produk" class="h-20 w-full object-contain"></button></div></section>
-    <section class="p-6 lg:p-10"><div class="flex items-center gap-2"><span th:text="${product.status}" class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700"></span><span th:text="${product.stockSlot}+' slot tersedia'" class="rounded-full bg-violet-50 px-3 py-1 text-xs font-black text-violet-700"></span></div><p class="mt-8 text-xs font-bold uppercase tracking-[.22em] text-violet-600" th:text="${product.manufacturer ?: 'FigureVault Selection'}"></p><h1 class="mt-2 text-4xl font-black leading-tight" th:text="${product.name}"></h1><p class="mt-4 leading-relaxed text-zinc-500">Collectible premium pilihan untuk melengkapi display koleksi Anda. Detail sculpt tajam, finishing berkualitas, dan dikemas aman untuk kolektor.</p>
-      <div class="my-8 border-y border-zinc-100 py-6"><p class="text-sm font-semibold text-zinc-400">Harga penuh</p><p class="mt-1 text-4xl font-black" th:text="'Rp '+${#numbers.formatDecimal(product.fullPrice,0,'COMMA',0,'POINT')}"></p><div class="mt-3 flex items-center justify-between rounded-2xl bg-amber-50 p-4"><span class="font-bold text-amber-800">Mulai dengan DP</span><b class="text-xl text-amber-700" th:text="'Rp '+${#numbers.formatDecimal(product.dpPrice,0,'COMMA',0,'POINT')}"></b></div></div>
-      <div class="grid grid-cols-2 gap-3 text-sm"><div class="rounded-2xl border border-zinc-200 p-4"><span class="text-zinc-400">Scale</span><b class="mt-1 block" th:text="${product.scaleType ?: 'Standard'}"></b></div><div class="rounded-2xl border border-zinc-200 p-4"><span class="text-zinc-400">Rilis</span><b class="mt-1 block" th:text="${product.releaseDate ?: 'Segera'}"></b></div></div>
-      <button th:disabled="${product.stockSlot <= 0}" class="mt-8 w-full rounded-2xl bg-zinc-900 py-4 text-lg font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-violet-600 disabled:cursor-not-allowed disabled:bg-zinc-300" th:text="${product.stockSlot > 0 ? 'Pre-Order Sekarang' : 'Stok Habis'}"></button><p class="mt-3 text-center text-xs text-zinc-400">Pembayaran aman · Slot stok terverifikasi</p>
-    </section>
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{store/fragments :: head(${product.name})}"></head>
+<body class="min-h-screen bg-zinc-100 text-zinc-900">
+<nav th:replace="~{store/fragments :: nav}"></nav>
+<main class="mx-auto max-w-7xl px-4 py-8 lg:px-8" x-data="{tab:'description'}">
+  <div class="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl shadow-zinc-200/60">
+    <div class="grid lg:grid-cols-[1.08fr_.92fr]">
+      <section th:replace="~{store/fragments :: gallery(${product})}"></section>
+      <section th:replace="~{store/fragments :: purchase(${product})}"></section>
+    </div>
+    <section th:replace="~{store/fragments :: details(${product})}"></section>
   </div>
-  <section class="border-t border-zinc-200 p-6 lg:p-10"><div class="flex gap-6 border-b border-zinc-200"><button @click="tab='description'" :class="tab==='description'?'border-violet-600 text-violet-700':'border-transparent text-zinc-400'" class="border-b-2 pb-3 font-bold">Deskripsi</button><button @click="tab='spec'" :class="tab==='spec'?'border-violet-600 text-violet-700':'border-transparent text-zinc-400'" class="border-b-2 pb-3 font-bold">Spesifikasi</button></div><p x-show="tab==='description'" class="max-w-4xl py-6 leading-8 text-zinc-600">Setiap collectible diperiksa sebelum dikirim. Produk Pre-Order diamankan dengan pembayaran DP, lalu pelanggan akan menerima notifikasi saat pelunasan tersedia.</p><dl x-show="tab==='spec'" class="grid max-w-2xl grid-cols-2 gap-4 py-6 text-sm"><dt class="text-zinc-400">Manufacturer</dt><dd class="font-bold" th:text="${product.manufacturer ?: '-'}"></dd><dt class="text-zinc-400">Scale</dt><dd class="font-bold" th:text="${product.scaleType ?: '-'}"></dd><dt class="text-zinc-400">Status</dt><dd class="font-bold" th:text="${product.status}"></dd></dl></section>
-</div></main></body></html>
+</main>
+</body>
+</html>
