@@ -3,9 +3,11 @@ package com.figurestore.api.controller;
 import com.figurestore.api.dto.request.CancelOrderRequest;
 import com.figurestore.api.dto.request.CreateOrderRequest;
 import com.figurestore.api.dto.response.OrderResponse;
+import com.figurestore.api.dto.response.PelunasanNotificationResponse;
 import com.figurestore.api.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,5 +34,11 @@ public class OrderController {
     public OrderResponse cancel(@PathVariable Long id,
                                 @RequestBody(required = false) CancelOrderRequest request) {
         return orderService.cancel(id, request == null ? null : request.note());
+    }
+
+    @PostMapping("/{id}/pelunasan-notification")
+    @PreAuthorize("hasRole('ADMIN')")
+    public PelunasanNotificationResponse triggerPelunasan(@PathVariable Long id) {
+        return orderService.triggerPelunasan(id);
     }
 }
