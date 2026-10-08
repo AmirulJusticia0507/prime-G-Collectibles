@@ -8,12 +8,12 @@
 - [x] Validasi `dp_price <= full_price` di level DB & aplikasi
 
 ## Fase 2: Logika PO & DP
-- [ ] Entity + Repository Order, OrderItem, Payment
-- [ ] Endpoint create PO order (potong slot, buat tagihan DP, set expired_at)
-- [ ] Generate order_number format `PO-YYYYMMDD-<uuid8>`
-- [ ] State machine transisi status order
-- [ ] Endpoint cancel order + kembalikan slot stok
-- [ ] Scheduler expire DP (24 jam) & pelunasan (7 hari)
+- [x] Entity + Repository Order, OrderItem, Payment
+- [x] Endpoint create PO order (potong slot, buat tagihan DP, set expired_at)
+- [x] Generate order_number format `PO-YYYYMMDD-<uuid8>`
+- [x] State machine transisi status order
+- [x] Endpoint cancel order + kembalikan slot stok
+- [x] Scheduler expire DP (24 jam) & pelunasan (7 hari)
 
 ## Fase 3: Payment Gateway (Midtrans)
 - [ ] Integrasi Snap token saat create payment
