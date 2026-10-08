@@ -35,9 +35,9 @@ public class SecurityConfig {
     @org.springframework.core.annotation.Order(1)
     SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/admin/login", "/admin/**", "/css/**", "/js/**", "/favicon.svg")
+                .securityMatcher("/admin/login", "/admin/**", "/css/**", "/js/**", "/images/**", "/favicon.svg")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/admin/login", "/favicon.svg").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/admin/login", "/favicon.svg").permitAll()
                         .anyRequest().hasRole("ADMIN"))
                 .formLogin(form -> form
                         .loginPage("/admin/login")
@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/webhooks/midtrans", "/favicon.svg").permitAll()
-                        .requestMatchers("/css/**", "/js/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers("/api/products/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
