@@ -1,33 +1,34 @@
-<!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html><html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head(title)">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${title} + ' — FigureVault Admin'">FigureVault Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <style>.input{background:#1e293b;border:1px solid #334155;border-radius:.25rem;padding:.4rem .65rem;color:#e2e8f0}.btn{background:#4f46e5;color:white;border-radius:.25rem;padding:.45rem .8rem}.panel{background:#0f172a;border:1px solid #1e293b;border-radius:.5rem;padding:1rem}.cell{text-align:left;padding:.6rem}</style>
-</head>
-<body>
-<nav th:fragment="nav" class="bg-slate-900 border-b border-slate-800">
-  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-    <a href="/admin/orders" class="font-bold text-indigo-400">FigureVault Admin</a>
-    <div class="flex gap-4 text-sm">
-      <a href="/admin/orders" class="hover:text-indigo-400">Orders</a>
-      <a href="/admin/products" class="hover:text-indigo-400">Products</a>
-      <a href="/admin/users" class="hover:text-indigo-400">Users</a>
-      <form method="post" action="/admin/logout"><button class="text-rose-400">Logout</button></form>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title th:text="${title} + ' · FigureVault'">FigureVault</title>
+  <script src="https://cdn.tailwindcss.com"></script><script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak]{display:none!important} body{font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+    .input{width:100%;background:#fff;border:1px solid #e4e4e7;border-radius:.75rem;padding:.65rem .8rem;color:#18181b;outline:none;transition:.2s}.input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px #ede9fe}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:#18181b;color:#fff;border-radius:.75rem;padding:.65rem 1rem;font-weight:700;font-size:.8rem;transition:.2s}.btn:hover{background:#7c3aed;transform:translateY(-1px)}
+    .panel{background:#fff;border:1px solid #e4e4e7;border-radius:1.25rem;padding:1.25rem;box-shadow:0 1px 2px #00000008}.cell{text-align:left;padding:.9rem 1rem;vertical-align:middle}
+  </style>
+</head><body>
+<nav th:fragment="nav" class="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/90 backdrop-blur-xl" x-data="{open:false}">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
+    <a href="/admin/orders" class="flex items-center gap-3"><span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-lg font-black text-white shadow-lg shadow-violet-200">FV</span><span><b class="block tracking-tight text-zinc-900">FigureVault</b><small class="block text-[10px] font-bold uppercase tracking-[.22em] text-violet-600">Retail Console</small></span></a>
+    <button @click="open=!open" class="rounded-xl border border-zinc-200 p-2 lg:hidden" aria-label="Menu">☰</button>
+    <div :class="open?'flex':'hidden'" class="absolute left-4 right-4 top-16 flex-col gap-1 rounded-2xl border border-zinc-200 bg-white p-3 shadow-xl lg:static lg:flex lg:flex-row lg:items-center lg:border-0 lg:p-0 lg:shadow-none">
+      <a href="/admin/orders" class="rounded-xl px-4 py-2 text-sm font-semibold text-zinc-600 hover:bg-violet-50 hover:text-violet-700">Pesanan</a>
+      <a href="/admin/products" class="rounded-xl px-4 py-2 text-sm font-semibold text-zinc-600 hover:bg-violet-50 hover:text-violet-700">Produk</a>
+      <a href="/admin/users" class="rounded-xl px-4 py-2 text-sm font-semibold text-zinc-600 hover:bg-violet-50 hover:text-violet-700">Pelanggan</a>
+      <form method="post" action="/admin/logout"><button class="ml-0 rounded-xl px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50 lg:ml-3">Keluar</button></form>
     </div>
   </div>
 </nav>
 <div th:fragment="feedback">
-  <p th:if="${message}" th:text="${message}" class="mb-4 rounded border border-emerald-500/20 bg-emerald-500/10 p-3 text-sm text-emerald-400"></p>
-  <p th:if="${error}" th:text="${error}" class="mb-4 rounded border border-rose-500/20 bg-rose-500/10 p-3 text-sm text-rose-400"></p>
+  <div th:if="${message}" class="mb-5 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700"><span class="grid h-7 w-7 place-items-center rounded-full bg-emerald-500 text-white">✓</span><span th:text="${message}"></span></div>
+  <div th:if="${error}" class="mb-5 flex items-center gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-semibold text-rose-700"><span class="grid h-7 w-7 place-items-center rounded-full bg-rose-500 text-white">!</span><span th:text="${error}"></span></div>
 </div>
-<div th:fragment="pager(path,result,extra)" th:if="${result.totalPages > 1}" class="flex justify-center gap-3 mt-4 text-sm">
-  <a th:if="${result.hasPrevious()}" th:href="${path+'?page='+(result.number-1)+'&'+extra}" class="btn">Sebelumnya</a>
-  <span class="p-2" th:text="${(result.number+1)+' / '+result.totalPages}"></span>
-  <a th:if="${result.hasNext()}" th:href="${path+'?page='+(result.number+1)+'&'+extra}" class="btn">Berikutnya</a>
+<div th:fragment="pager(path,result,extra)" th:if="${result.totalPages > 1}" class="mt-6 flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-3 text-sm">
+  <a th:if="${result.hasPrevious()}" th:href="${path+'?page='+(result.number-1)+'&'+extra}" class="btn">← Sebelumnya</a><span th:unless="${result.hasPrevious()}" class="px-4 text-zinc-300">← Sebelumnya</span>
+  <span class="font-bold text-zinc-500" th:text="${'Halaman '+(result.number+1)+' dari '+result.totalPages}"></span>
+  <a th:if="${result.hasNext()}" th:href="${path+'?page='+(result.number+1)+'&'+extra}" class="btn">Berikutnya →</a><span th:unless="${result.hasNext()}" class="px-4 text-zinc-300">Berikutnya →</span>
 </div>
-</body>
-</html>
+</body></html>

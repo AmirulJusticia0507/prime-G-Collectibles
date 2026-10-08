@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{admin/fragments :: head('Products')}"></head>
-<body class="bg-slate-950 text-slate-200 min-h-screen">
+<body class="min-h-screen bg-zinc-50 text-zinc-900">
 <nav th:replace="~{admin/fragments :: nav}"></nav>
-<main class="max-w-7xl mx-auto px-4 py-6" x-data="{ showAdd: false }">
+<main class="mx-auto max-w-7xl px-4 py-8 lg:px-8" x-data="{ showAdd: false }">
   <div th:replace="~{admin/fragments :: feedback}"></div>
-  <div class="flex flex-wrap gap-3 items-center justify-between mb-4">
-    <h1 class="text-xl font-semibold">Manajemen Produk</h1>
+  <div class="mb-7 flex flex-wrap items-end justify-between gap-4"><div><p class="text-xs font-bold uppercase tracking-[.22em] text-violet-600">Inventory</p><h1 class="mt-1 text-3xl font-black tracking-tight">Katalog produk</h1><p class="mt-2 text-sm text-zinc-500" th:text="${result.totalElements + ' produk dalam katalog'}"></p></div>
     <div class="flex gap-2">
       <form method="get" class="flex gap-2"><input name="query" th:value="${query}" placeholder="Nama/manufacturer" class="input"><button class="btn">Cari</button></form>
       <button @click="showAdd=!showAdd" class="btn">Tambah Produk</button>
     </div>
   </div>
-  <form x-show="showAdd" x-transition method="post" action="/admin/products" class="panel grid md:grid-cols-4 gap-3 mb-4">
+  <form x-cloak x-show="showAdd" x-transition method="post" action="/admin/products" class="panel mb-5 grid gap-3 md:grid-cols-4">
     <input required name="name" placeholder="Nama" class="input"><input name="manufacturer" placeholder="Manufacturer" class="input">
     <input name="scaleType" placeholder="Scale" class="input"><input name="releaseDate" type="date" class="input">
     <input required name="fullPrice" type="number" min="1" placeholder="Harga penuh" class="input">
@@ -21,10 +20,10 @@
     <select name="status" class="input"><option>PO_OPEN</option><option>PO_CLOSED</option><option>READY_STOCK</option></select>
     <button class="btn md:col-span-4">Simpan Produk</button>
   </form>
-  <div class="panel overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-slate-400">
+  <div class="overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-sm"><table class="w-full text-sm"><thead class="border-b border-zinc-200 bg-zinc-50"><tr class="text-xs uppercase tracking-wider text-zinc-500">
     <th class="cell">Nama</th><th class="cell">Manufacturer</th><th class="cell">Scale</th><th class="cell">Harga</th><th class="cell">DP</th><th class="cell">Slot</th><th class="cell">Status</th><th class="cell">Aksi</th>
   </tr></thead><tbody>
-    <tr th:each="p : ${products}" class="border-t border-slate-800">
+    <tr th:each="p : ${products}" class="border-b border-zinc-100 transition hover:bg-violet-50/40">
       <td class="cell"><input required name="name" th:value="${p.name}" th:attr="form=${'product-'+p.id}" class="input w-44"></td>
       <td class="cell"><input name="manufacturer" th:value="${p.manufacturer}" th:attr="form=${'product-'+p.id}" class="input w-36"></td>
       <td class="cell"><input name="scaleType" th:value="${p.scaleType}" th:attr="form=${'product-'+p.id}" class="input w-20"><input type="hidden" name="releaseDate" th:value="${p.releaseDate}" th:attr="form=${'product-'+p.id}"></td>

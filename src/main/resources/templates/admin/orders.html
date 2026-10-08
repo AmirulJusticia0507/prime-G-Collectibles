@@ -1,61 +1,13 @@
-<!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/fragments :: head('Orders')}"></head>
-<body class="bg-slate-950 text-slate-200 min-h-screen">
-<nav th:replace="~{admin/fragments :: nav}"></nav>
-
-<main class="max-w-6xl mx-auto px-4 py-6" x-data="{ showFilter: false }">
-  <div th:replace="~{admin/fragments :: feedback}"></div>
-  <div class="flex items-center justify-between mb-4">
-    <h1 class="text-xl font-semibold">Daftar Order</h1>
-    <button @click="showFilter = !showFilter" class="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-sm hover:bg-slate-700">Filter Status</button>
-  </div>
-
-  <div x-show="showFilter" x-transition class="mb-4 p-4 bg-slate-900 border border-slate-800 rounded">
-    <form method="get" action="/admin/orders" class="flex items-center gap-3">
-      <select name="status" class="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm">
-        <option value="">Semua Status</option>
-        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == status}"></option>
-      </select>
-      <button class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 rounded text-sm text-white">Terapkan</button>
-    </form>
-  </div>
-
-  <div class="bg-slate-900 border border-slate-800 rounded overflow-x-auto">
-    <table class="w-full text-sm">
-      <thead class="bg-slate-800/60 text-slate-400">
-        <tr>
-          <th class="text-left px-4 py-2">Order</th>
-          <th class="text-left px-4 py-2">User</th>
-          <th class="text-left px-4 py-2">Total</th>
-          <th class="text-left px-4 py-2">Status</th>
-          <th class="text-left px-4 py-2 w-56">Progress DP</th>
-          <th class="text-left px-4 py-2">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="r : ${rows}" class="border-t border-slate-800">
-          <td class="px-4 py-2 font-mono text-xs" th:text="${r.orderNumber}"></td>
-          <td class="px-4 py-2" th:text="${r.userId}"></td>
-          <td class="px-4 py-2" th:text="'Rp ' + ${#numbers.formatDecimal(r.totalAmount, 0, 'COMMA', 0, 'POINT')}"></td>
-          <td class="px-4 py-2">
-            <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border" th:classappend="${r.badgeClass}" th:text="${r.badge}"></span>
-          </td>
-          <td class="px-4 py-2"><form th:if="${r.canTriggerPelunasan}" method="post" th:action="@{/admin/orders/{id}/pelunasan(id=${r.id})}"><button class="btn whitespace-nowrap">Kirim Pelunasan</button></form><span th:unless="${r.canTriggerPelunasan}" class="text-slate-600">—</span></td>
-          <td class="px-4 py-2">
-            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-              <div class="bg-indigo-500 h-2 rounded-full" th:style="'width:' + ${r.progressPercent} + '%'"></div>
-            </div>
-            <p class="text-xs text-slate-500 mt-0.5" th:text="'Dibayar Rp ' + ${#numbers.formatDecimal(r.paidTotal, 0, 'COMMA', 0, 'POINT')} + ' (' + ${r.progressPercent} + '%)'"></p>
-          </td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(rows)}">
-          <td colspan="6" class="px-4 py-6 text-center text-slate-500">Belum ada order.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div th:replace="~{admin/fragments :: pager('/admin/orders', ${result}, 'status=' + (${status} ?: ''))}"></div>
-</main>
-</body>
-</html>
+<!DOCTYPE html><html lang="id" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{admin/fragments :: head('Pesanan')}"></head>
+<body class="min-h-screen bg-zinc-50 text-zinc-900"><nav th:replace="~{admin/fragments :: nav}"></nav>
+<main class="mx-auto max-w-7xl px-4 py-8 lg:px-8" x-data="{showFilter:false}"><div th:replace="~{admin/fragments :: feedback}"></div>
+  <header class="mb-7 flex flex-wrap items-end justify-between gap-4"><div><p class="text-xs font-bold uppercase tracking-[.22em] text-violet-600">Order management</p><h1 class="mt-1 text-3xl font-black tracking-tight">Pesanan toko</h1><p class="mt-2 text-sm text-zinc-500">Pantau pembayaran dan progres seluruh pesanan.</p></div><button @click="showFilter=!showFilter" class="btn">⚙ Filter status</button></header>
+  <section class="mb-6 grid gap-4 sm:grid-cols-3"><div class="panel"><p class="text-xs font-bold uppercase tracking-wider text-zinc-400">Total hasil</p><p class="mt-2 text-3xl font-black" th:text="${result.totalElements}">0</p></div><div class="panel"><p class="text-xs font-bold uppercase tracking-wider text-zinc-400">Halaman aktif</p><p class="mt-2 text-3xl font-black text-violet-600" th:text="${result.number+1}">1</p></div><div class="panel bg-gradient-to-br from-zinc-900 to-zinc-800 text-white"><p class="text-xs font-bold uppercase tracking-wider text-zinc-400">Status filter</p><p class="mt-2 truncate text-xl font-black" th:text="${status==null || status=='' ? 'Semua pesanan' : status}"></p></div></section>
+  <form x-cloak x-show="showFilter" x-transition method="get" class="panel mb-5 flex flex-wrap items-center gap-3"><select name="status" class="input max-w-xs"><option value="">Semua Status</option><option th:each="s:${statuses}" th:value="${s}" th:text="${s}" th:selected="${s==status}"></option></select><button class="btn">Terapkan filter</button></form>
+  <div class="overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-sm"><table class="w-full text-sm"><thead class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wider text-zinc-500"><tr><th class="cell">Order</th><th class="cell">Pelanggan</th><th class="cell">Total</th><th class="cell">Status</th><th class="cell w-60">Pembayaran</th><th class="cell">Aksi</th></tr></thead><tbody>
+    <tr th:each="r:${rows}" class="border-b border-zinc-100 transition hover:bg-violet-50/40"><td class="cell font-mono text-xs font-bold text-violet-700" th:text="${r.orderNumber}"></td><td class="cell text-zinc-500" th:text="'#'+${r.userId}"></td><td class="cell font-bold" th:text="'Rp '+${#numbers.formatDecimal(r.totalAmount,0,'COMMA',0,'POINT')}"></td><td class="cell"><span class="inline-flex rounded-full border px-2.5 py-1 text-xs font-bold" th:classappend="${r.badgeClass}" th:text="${r.badge}"></span></td>
+      <td class="cell"><div class="h-2 overflow-hidden rounded-full bg-zinc-100"><div class="h-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500" th:style="'width:'+${r.progressPercent}+'%'"></div></div><p class="mt-1.5 text-xs font-medium text-zinc-500" th:text="'Rp '+${#numbers.formatDecimal(r.paidTotal,0,'COMMA',0,'POINT')}+' · '+${r.progressPercent}+'%'"></p></td>
+      <td class="cell"><form th:if="${r.canTriggerPelunasan}" method="post" th:action="@{/admin/orders/{id}/pelunasan(id=${r.id})}"><button class="btn whitespace-nowrap">Kirim tagihan</button></form><span th:unless="${r.canTriggerPelunasan}" class="text-zinc-300">—</span></td></tr>
+    <tr th:if="${#lists.isEmpty(rows)}"><td colspan="6" class="p-14 text-center"><div class="text-4xl">📦</div><p class="mt-3 font-bold">Belum ada pesanan</p><p class="text-sm text-zinc-400">Pesanan yang masuk akan tampil di sini.</p></td></tr>
+  </tbody></table></div><div th:replace="~{admin/fragments :: pager('/admin/orders',${result},'status='+(${status} ?: ''))}"></div>
+</main></body></html>
