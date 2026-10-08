@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
+    boolean existsByIdAndOrderUserEmail(Long id, String email);
     List<Payment> findByOrderId(Long orderId);
     java.util.Optional<Payment> findByPaymentNumber(String paymentNumber);
     boolean existsByMidtransTransactionId(String midtransTransactionId);

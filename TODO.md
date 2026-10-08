@@ -23,10 +23,10 @@
 - [x] Unit test untuk skenario callback sukses/expired/gagal
 
 ## Fase 4: Notifikasi Pelunasan
-- [ ] Endpoint admin trigger notifikasi pelunasan (ubah status ke WAITING_PELUNASAN)
-- [ ] Kirim notifikasi via Email
+- [x] Endpoint admin trigger notifikasi pelunasan (ubah status ke WAITING_PELUNASAN)
+- [x] Kirim notifikasi via Email
 - [ ] (Opsional) WhatsApp via gateway
-- [ ] Catat ke `order_status_history`
+- [x] Catat ke `order_status_history`
 
 ## Fase 5: Dashboard Admin (Tailwind)
 - [ ] Setup Tailwind CSS (dengan Thymeleaf layout)
@@ -36,8 +36,8 @@
 - [ ] Badge status & progress bar DP (lihat contoh di docs)
 
 ## Fase 6: Hardening
-- [ ] Spring Security + JWT (role ADMIN/CUSTOMER)
-- [ ] Audit trail ke `order_status_history` di setiap transisi
-- [ ] Global exception handler (@RestControllerAdvice)
-- [ ] Logging & request tracing
-- [ ] Test coverage minimal service layer
+- [x] Spring Security + JWT (role ADMIN/CUSTOMER)
+- [x] Audit trail ke `order_status_history` di setiap transisi
+- [x] Global exception handler (@RestControllerAdvice)
+- [x] Logging & request tracing
+- [x] Test coverage minimal service layer

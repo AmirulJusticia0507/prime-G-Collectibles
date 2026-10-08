@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -79,7 +80,7 @@ class PelunasanNotificationTests {
     @Test
     void adminTriggersFinalPaymentAndEmail() throws Exception {
         mvc.perform(post("/api/orders/{id}/pelunasan-notification", order.id())
-                        .with(httpBasic("admin", "test-password")))
+                        .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.emailSent").value(true))
                 .andExpect(jsonPath("$.order.fulfillmentStatus").value("WAITING_PELUNASAN"))
@@ -101,7 +102,7 @@ class PelunasanNotificationTests {
         entity.setFulfillmentStatus("WAITING_DP");
 
         mvc.perform(post("/api/orders/{id}/pelunasan-notification", order.id())
-                        .with(httpBasic("admin", "test-password")))
+                        .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isBadRequest());
     }
 }

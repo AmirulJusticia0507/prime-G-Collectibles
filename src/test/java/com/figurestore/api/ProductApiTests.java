@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,7 +53,7 @@ class ProductApiTests {
     @Test
     void adminCanCreateReadUpdateAndDeleteProduct() throws Exception {
         mvc.perform(post("/api/products")
-                        .with(httpBasic("admin", "test-password"))
+                        .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(PRODUCT))
                 .andExpect(status().isCreated())
@@ -68,14 +69,14 @@ class ProductApiTests {
 
         String updated = PRODUCT.replace("Test Figure", "Updated Figure");
         mvc.perform(put("/api/products/{id}", product.getId())
-                        .with(httpBasic("admin", "test-password"))
+                        .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updated))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Updated Figure"));
 
         mvc.perform(delete("/api/products/{id}", product.getId())
-                        .with(httpBasic("admin", "test-password")))
+                        .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isNoContent());
     }
 
@@ -84,7 +85,7 @@ class ProductApiTests {
         String invalid = PRODUCT.replace("500000", "2500000");
 
         mvc.perform(post("/api/products")
-                        .with(httpBasic("admin", "test-password"))
+                        .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalid))
                 .andExpect(status().isBadRequest());

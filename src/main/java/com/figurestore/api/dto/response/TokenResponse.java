@@ -1,0 +1,3 @@
+package com.figurestore.api.dto.response;
+
+public record TokenResponse(String accessToken, String tokenType, long expiresIn) {}

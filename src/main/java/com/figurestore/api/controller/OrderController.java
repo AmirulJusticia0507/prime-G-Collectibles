@@ -20,17 +20,20 @@ public class OrderController {
     }
 
     @PostMapping("/pre-order")
+    @PreAuthorize("hasRole('ADMIN') or @orderSecurity.isUser(#request.userId(), authentication)")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse createPreOrder(@Valid @RequestBody CreateOrderRequest request) {
         return orderService.createPreOrder(request);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @orderSecurity.canAccessOrder(#id, authentication)")
     public OrderResponse get(@PathVariable Long id) {
         return orderService.findById(id);
     }
 
     @PostMapping("/{id}/cancel")
+    @PreAuthorize("hasRole('ADMIN') or @orderSecurity.canAccessOrder(#id, authentication)")
     public OrderResponse cancel(@PathVariable Long id,
                                 @RequestBody(required = false) CancelOrderRequest request) {
         return orderService.cancel(id, request == null ? null : request.note());
