@@ -46,6 +46,13 @@ class AdminDashboardTests {
     }
 
     @Test
+    void adminCanLogoutBackToLogin() throws Exception {
+        mvc.perform(post("/admin/logout").with(user("admin").roles("ADMIN")).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/login?logout"));
+    }
+
+    @Test
     void adminCanRenderDashboardAndUpdateProductSlot() throws Exception {
         Product product = new Product();
         product.setName("Dashboard Product");
