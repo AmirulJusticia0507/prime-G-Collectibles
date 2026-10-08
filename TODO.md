@@ -1,11 +1,11 @@
 # TODO List - FigureVault API
 
 ## Fase 1: Setup DB & Catalog
-- [ ] Buat project Spring Boot (Spring Web, JPA, PostgreSQL, Validation, Security)
-- [ ] Buat migrasi skema (Flyway/Liquibase) untuk tabel: users, products, orders, order_items, payments, order_status_history
-- [ ] Entity + Repository untuk Product
-- [ ] CRUD endpoint Product (admin) & list katalog (public)
-- [ ] Validasi `dp_price <= full_price` di level DB & aplikasi
+- [x] Buat project Spring Boot (Spring Web, JPA, PostgreSQL, Validation, Security)
+- [x] Buat migrasi skema (Flyway/Liquibase) untuk tabel: users, products, orders, order_items, payments, order_status_history
+- [x] Entity + Repository untuk Product
+- [x] CRUD endpoint Product (admin) & list katalog (public)
+- [x] Validasi `dp_price <= full_price` di level DB & aplikasi
 
 ## Fase 2: Logika PO & DP
 - [ ] Entity + Repository Order, OrderItem, Payment
