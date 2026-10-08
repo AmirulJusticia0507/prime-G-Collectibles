@@ -24,14 +24,14 @@
     <th class="cell">Nama</th><th class="cell">Manufacturer</th><th class="cell">Scale</th><th class="cell">Harga</th><th class="cell">DP</th><th class="cell">Slot</th><th class="cell">Status</th><th class="cell">Aksi</th>
   </tr></thead><tbody>
     <tr th:each="p : ${products}" class="border-b border-zinc-100 transition hover:bg-violet-50/40">
-      <td class="cell"><a th:href="@{/products/{id}(id=${p.id})}" target="_blank" class="mb-2 block text-xs font-bold text-violet-600 hover:underline">Lihat detail ↗</a><input required name="name" th:value="${p.name}" th:attr="form=${'product-'+p.id}" class="input w-44"></td>
+      <td class="cell"><input required name="name" th:value="${p.name}" th:attr="form=${'product-'+p.id}" class="input w-44"></td>
       <td class="cell"><input name="manufacturer" th:value="${p.manufacturer}" th:attr="form=${'product-'+p.id}" class="input w-36"></td>
       <td class="cell"><input name="scaleType" th:value="${p.scaleType}" th:attr="form=${'product-'+p.id}" class="input w-20"><input type="hidden" name="releaseDate" th:value="${p.releaseDate}" th:attr="form=${'product-'+p.id}"></td>
       <td class="cell"><input required name="fullPrice" type="number" min="1" th:value="${p.fullPrice}" th:attr="form=${'product-'+p.id}" class="input w-28"></td>
       <td class="cell"><input required name="dpPrice" type="number" min="1" th:value="${p.dpPrice}" th:attr="form=${'product-'+p.id}" class="input w-28"></td>
       <td class="cell"><input required name="stockSlot" type="number" min="0" th:value="${p.stockSlot}" th:attr="form=${'product-'+p.id}" class="input w-20"></td>
       <td class="cell"><select name="status" th:attr="form=${'product-'+p.id}" class="input"><option th:selected="${p.status=='PO_OPEN'}">PO_OPEN</option><option th:selected="${p.status=='PO_CLOSED'}">PO_CLOSED</option><option th:selected="${p.status=='READY_STOCK'}">READY_STOCK</option></select></td>
-      <td class="cell whitespace-nowrap"><form method="post" th:id="${'product-'+p.id}" th:action="@{/admin/products/{id}(id=${p.id})}" class="inline"><button class="text-indigo-400 mr-3">Simpan</button></form>
+      <td class="cell whitespace-nowrap"><a th:href="@{/products/{id}(id=${p.id})}" target="_blank" class="mr-3 font-semibold text-violet-600 hover:underline">Detail</a><form method="post" th:id="${'product-'+p.id}" th:action="@{/admin/products/{id}(id=${p.id})}" class="inline"><button class="text-indigo-400 mr-3">Simpan</button></form>
         <form method="post" th:action="@{/admin/products/{id}/delete(id=${p.id})}" class="inline" onsubmit="return confirm('Hapus produk ini?')"><button class="text-rose-400">Hapus</button></form></td>
     </tr>
     <tr th:if="${#lists.isEmpty(products)}"><td colspan="8" class="p-6 text-center text-slate-500">Produk tidak ditemukan.</td></tr>
